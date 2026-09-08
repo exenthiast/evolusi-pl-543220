@@ -11,6 +11,9 @@ on:
       - main
       - dev
 
+permissions:
+  contents: read
+
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
