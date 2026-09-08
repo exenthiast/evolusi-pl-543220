@@ -10,8 +10,8 @@ Repositori ini merupakan implementasi tugas praktikum mata kuliah Evolusi dan Ko
 
 ## Prasyarat Sistem
 
-Sebelum menjalankan proyek ini secara lokal, pastikan sistem kamu sudah terinstal:
-* PHP (minimal versi 8.2)
+Sebelum menjalankan proyek ini secara lokal, sistem yang harus terinstal:
+* PHP 8.5
 * Composer
 * Git
 
