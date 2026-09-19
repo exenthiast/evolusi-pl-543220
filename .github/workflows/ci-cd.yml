@@ -27,7 +27,7 @@ jobs:
           coverage: none
 
       - name: Install Composer Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
   test:
     name: Test
@@ -45,7 +45,7 @@ jobs:
           coverage: none
 
       - name: Install Composer Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
       - name: Setup Environment File
         run: |
