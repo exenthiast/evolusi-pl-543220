@@ -1,0 +1,83 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, dom, fileinfo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Install Composer Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, dom, fileinfo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Install Composer Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+      - name: Setup Environment File
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run Tests
+        run: php artisan test
+
+  staging:
+    name: Staging
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Staging
+        run: |
+          echo "Simulasi Deploy ke Lingkungan Staging..."
+          echo "Staging deployment berhasil!"
+
+  production:
+    name: Production
+    needs: staging
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Production
+        run: |
+          echo "Langkah 1: Mengaktifkan mode pemeliharaan (php artisan down)"
+          echo "Langkah 2: Menarik kode terbaru dari branch main (git pull origin main)"
+          echo "Langkah 3: Menginstal dependensi Composer (composer install --no-dev)"
+          echo "Langkah 4: Menjalankan migrasi database (php artisan migrate --force)"
+          echo "Langkah 5: Melakukan cache konfigurasi (php artisan config:cache)"
+          echo "Langkah 6: Melakukan cache routing (php artisan route:cache)"
+          echo "Langkah 7: Mematikan mode pemeliharaan (php artisan up)"
