@@ -4,6 +4,8 @@ import { formatPrice, truncateText } from './formatters.js'
 describe('formatters', () => {
   describe('formatPrice', () => {
     it('mengubah angka menjadi format mata uang Rupiah', () => {
+      // Sengaja dibuat gagal untuk pengujian pipeline Skenario B
+      expect(true).toBe(false)
       const formatted = formatPrice(18500000)
       expect(formatted).toContain('18.500.000')
       expect(formatted).toContain('Rp')
