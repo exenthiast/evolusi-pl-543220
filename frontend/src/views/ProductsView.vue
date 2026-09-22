@@ -43,29 +43,19 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { formatPrice } from '../utils/formatters.js'
+import { getProducts } from '../services/api.js'
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 const products = ref([])
 const loading = ref(true)
 const error = ref(null)
 
-const formatPrice = (price) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-  }).format(price)
-}
-
 const fetchProducts = async () => {
   loading.value = true
   error.value = null
   try {
-    const response = await fetch(`${apiUrl}/products`)
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    const data = await response.json()
+    const data = await getProducts(apiUrl)
     products.value = data
   } catch (err) {
     error.value = err.message || 'Terjadi kesalahan saat menghubungi API Laravel'
