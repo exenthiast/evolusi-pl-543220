@@ -1,0 +1,8 @@
+node_modules
+vendor
+.git
+.env
+.env.*
+npm-debug.log
+docker-compose.override.yml
+storage/logs/*
