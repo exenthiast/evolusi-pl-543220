@@ -21,7 +21,10 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # -------------------------------------------------------------
 COPY composer.json composer.lock ./
 
-# 2. Install dependensi vendor (layer ini di-cache selama composer tidak berubah)
+# 2. Atur timeout composer lebih lama agar tahan koneksi lambat
+ENV COMPOSER_PROCESS_TIMEOUT=2000
+
+# 3. Install dependensi vendor (layer ini di-cache selama composer tidak berubah)
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev --no-scripts
 
 # -------------------------------------------------------------
