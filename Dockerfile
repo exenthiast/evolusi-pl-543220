@@ -61,10 +61,17 @@ COPY --from=builder /var/www/html /var/www/html
 RUN cp .env.example .env \
     && php artisan key:generate --force \
     && touch database/database.sqlite \
-    && chown -R www-data:www-data storage bootstrap/cache database \
+    && chown -R www-data:www-data storage bootstrap/cache database .env \
     && chmod -R 775 storage bootstrap/cache database
 
+# Keamanan: Jalankan container sebagai user non-root (bukan root)
+USER www-data
+
 EXPOSE 8000
+
+# Pemantauan: Cek kesehatan container secara berkala
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://127.0.0.1:8000/ || exit 1
 
 # Jalankan migrasi database & seeder otomatis, lalu jalankan server Laravel
 CMD ["sh", "-c", "php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=8000"]
